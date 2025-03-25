@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Church of Pentecost Huniso District</title>
+    <link rel="stylesheet" href="styles.css">
+  <!-- Inline CSS (Updated for layout issues and visibility) -->
+  <style>
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    text-align: center; /* Center all text */
+}
+
+h1, h2 {
+    color: #2c4e90;
+}
+
+header {
+    background-color: #f9e79f; /* Light yellow */
+    color: pink blue;
+    padding: 20px 0;
+}
+
+.navbar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.navbar nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.navbar nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 19px;
+}
+
+section {
+    padding: 50px;
+    margin: 20px 0;
+    border-radius: 10px;  /* Rounded borders */
+}
+
+/* Home Section */
+section#home {
+    background-color: #ecf0f1; /* Light yellow Orange */
+    border: 3px solid #34495e; /* Dark border */
+}
+
+/* About Section */
+section#about {
+    background-color: #d5f5e3; /* Light green */
+    border: 3px solid #2ecc71; /* Green border */
+}
+
+/* Services Section */
+section#services {
+    background-color: #f9e79f; /* Light yellow */
+    border: 3px solid #f39c12; /* Orange border */
+}
+
+/* Children's Ministry Section */
+section#children {
+    background-color: #f8c8dc; /* Light pink */
+    border: 3px solid #e74c3c; /* Red border */
+}
+
+/* Contact Section */
+section#contact {
+    background-color: #d6eaf8; /* Light blue */
+    border: 3px solid #3498db; /* Blue border */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #34495e;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Contact Form Styles */
+#contact-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#contact-form input,
+#contact-form textarea {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center; /* Center the text inside the form fields */
+}
+
+#contact-form button {
+    background-color: #34495e;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#contact-form button:hover {
+    background-color: #2c3e50;
+}
+/* Women's Ministry Section Styling */
+.women-ministry {
+    background-color: #f7f3f1; /* Light pinkish color */
+    border: 2px solid #e0a0a0; /* Soft border color for emphasis */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.women-ministry h2 {
+    color: #e84f56; /* Darker red for heading */
+    font-size: 2em;
+}
+
+.women-ministry ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.women-ministry ul li {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.women-ministry ul li strong {
+    color: #e84f56; /* Same red color for emphasis on activity names */
+}
+
+.women-ministry p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #333; /* Dark text color for better readability */
+}
+ </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage Multiple Profiles with Age Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .profile-form {
+            margin-bottom: 20px;
+        }
+        .profile-list {
+            margin-top: -2cm; /* Move profile section 2cm up */
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .adult-message {
+            color: blue;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>User Profiles</h1>
+
+    <div class="profile-form">
+        <label for="username">Name:</label>
+        <input type="text" id="username" placeholder="Enter your name" />
+        <br><br>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" />
+        <br><br>
+        <button onclick="saveProfile()">Save Profile</button>
+    </div>
+
+    <h2>Your Profiles</h2>
+    <div id="profile-info" class="profile-list">No profiles saved yet.</div>
+
+    <div id="success-message" class="success-message" style="display:none;"></div>
+    <div id="adult-message" class="adult-message" style="display:none;"></div>
+
+    <script>
+        // Function to save a profile to localStorage
+        function saveProfile() {
+            let username = document.getElementById('username').value;
+            let dob = document.getElementById('dob').value;
+
+            if (username && dob) {
+                // Calculate age from Date of Birth
+                let age = calculateAge(dob);
+
+                // Get existing profiles from localStorage (if any)
+                let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+
+                // Create a unique profile ID
+                let profileId = new Date().getTime(); // using timestamp as unique ID
+
+                // Add the new profile
+                profiles[profileId] = { name: username, dob: dob, age: age };
+
+                // Save the updated profiles object back to localStorage
+                localStorage.setItem('profiles', JSON.stringify(profiles));
+
+                // Clear the input fields
+                document.getElementById('username').value = '';
+                document.getElementById('dob').value = '';
+
+                // Display the updated profile list
+                displayProfiles();
+
+                // Show success message
+                showSuccessMessage(username);
+
+                // Show age-based message
+                if (age >= 18) {
+                    showAdultMessage();
+                }
+            } else {
+                alert("Please enter both your name and date of birth.");
+            }
+        }
+
+        // Function to calculate age from date of birth
+        function calculateAge(dob) {
+            let birthDate = new Date(dob);
+            let currentDate = new Date();
+            let age = currentDate.getFullYear() - birthDate.getFullYear();
+            let month = currentDate.getMonth() - birthDate.getMonth();
+
+            if (month < 0 || (month === 0 && currentDate.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Function to display all saved profiles from localStorage
+        function displayProfiles() {
+            let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+
+            let profileList = document.getElementById('profile-info');
+            profileList.innerHTML = ''; // Clear current list
+
+            if (Object.keys(profiles).length === 0) {
+                profileList.innerHTML = 'No profiles saved yet.';
+            } else {
+                // Loop through all profiles and display them
+                for (let profileId in profiles) {
+                    let profile = profiles[profileId];
+                    let profileDiv = document.createElement('div');
+                    profileDiv.innerHTML = `<strong>Name:</strong> ${profile.name}, <strong>Age:</strong> ${profile.age} <button onclick="deleteProfile(${profileId})">Delete</button>`;
+                    profileList.appendChild(profileDiv);
+                }
+            }
+        }
+
+        // Function to delete a specific profile
+        function deleteProfile(profileId) {
+            // Get existing profiles
+            let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+
+            // Remove the profile with the given ID
+            delete profiles[profileId];
+
+            // Save the updated profiles object back to localStorage
+            localStorage.setItem('profiles', JSON.stringify(profiles));
+
+            // Display the updated list
+            displayProfiles();
+        }
+
+        // Function to show success message
+        function showSuccessMessage(username) {
+            let successMessage = document.getElementById('success-message');
+            successMessage.innerHTML = `You have successfully stored your credentials, ${username}!`;
+            successMessage.style.display = 'block';
+
+            // Hide the success message after 7 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to show the adult message if the user is above 18
+        function showAdultMessage() {
+            let adultMessage = document.getElementById('adult-message');
+            adultMessage.innerHTML = "Hurray, you are an adult!";
+            adultMessage.style.display = 'block';
+
+            // Hide the adult message after 3 seconds
+            setTimeout(() => {
+                adultMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Display profiles on page load
+        window.onload = function() {
+            displayProfiles();
+        }
+
+    </script>
+
+</body>
+</html>
+
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>The Church of Pentecost Huniso District</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#children">Children's Ministry</a></li>
+                    <li><a href="#women">Women's Ministry</a></li>
+                    <li><a href="#pemem">Pemem (Men's Ministry)</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home">
+        <div class="welcome">
+            <h2>Welcome to The Church of Pentecost Huniso District</h2>
+            <p>Join us in worship and community. We believe in spreading love, hope, and joy to all.</p>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about">
+            <h2>About Our Church</h2>
+            <p>We are a vibrant community focused on spiritual growth, outreach, and service. Our mission is to bring people closer to Christ through faith and fellowship.</p>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="services">
+            <h2>Our Services</h2>
+            <ul>
+                <li>Sunday Worship: 10:00 AM</li>
+                <li>Wednesday Bible Study: 7:00 PM</li>
+                <li>Youth Group: Friday 6:30 PM</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="children">
+        <div class="children">
+            <h2>Children's Ministry</h2>
+            <p>Our Children’s Ministry offers a fun and educational environment for children to grow in faith. Here are some of the exciting activities they participate in:</p>
+            <ul>
+                <li><strong>Sunday School:</strong> Sundays at 9:00 AM - Bible lessons and activities.</li>
+                <li><strong>Kids' Choir:</strong> Wednesdays at 5:00 PM - Singing, worship, and music for kids.</li>
+                <li><strong>Vacation Bible School (VBS):</strong> Summer program filled with fun and faith-based activities.</li>
+                <li><strong>Craft and Play:</strong> Sundays after service - Creative activities and playtime for kids.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Women's Ministry Section with border and color -->
+    <section id="women" class="women-ministry">
+        <div class="women">
+            <h2>Women's Ministry</h2>
+            <p>Our Women's Ministry is dedicated to empowering and supporting women through spiritual growth, fellowship, and service. This ministry encourages women to come together and experience the love and grace of God, while also serving our community in practical ways. Here are some of the advanced activities within the ministry:</p>
+            <ul>
+                <li><strong>Women's Bible Study:</strong> A weekly gathering where women come together to study the Word of God, engage in discussions, and grow spiritually. (Every Thursday at 6:00 PM)</li>
+                <li><strong>Prayer Breakfast:</strong> Monthly morning meetings for prayer, worship, and fellowship. These gatherings foster unity and a deep sense of connection with God and each other. (First Saturday of each month)</li>
+                <li><strong>Women's Conference:</strong> An annual event where women from various regions gather for worship, seminars, and empowerment sessions. This conference focuses on spiritual growth, leadership, and community impact.</li>
+                <li><strong>Mentorship Program:</strong> A one-on-one mentorship program where seasoned women of faith guide younger women in their spiritual journeys, offering counsel and prayer.</li>
+                <li><strong>Community Outreach:</strong> Monthly initiatives where women serve the local community by volunteering at shelters, organizing food drives, and supporting local missions.</li>
+                <li><strong>Creative Arts & Worship:</strong> Women in the ministry use their creative talents to serve in the church's worship team, choir, and arts programs, including performing arts and crafts.</li>
+                <li><strong>Health & Wellness Seminars:</strong> Periodic health and wellness seminars, focusing on spiritual, physical, and mental well-being, as women come together to learn and grow in holistic health.</li>
+            </ul>
+            <p>The Women's Ministry aims to strengthen the faith of women and equip them for leadership roles both within the church and in the community. By building strong relationships, nurturing each other's faith, and empowering one another to live out God's calling, we see lives transformed.</p>
+            <p>Join us as we serve, grow, and build lasting bonds with other women who share the same passion for Christ and service to others. We look forward to welcoming you into our ministry!</p>
+        </div>
+    </section>
+
+    <!-- Pemem Section (Men's Ministry) with predefined style -->
+    <section id="pemem" class="pemem-ministry">
+        <div class="pemem">
+            <h2>Pemem (Pentecost Men Ministry)</h2>
+            <p>The Pemem Ministry is dedicated to fostering spiritual growth, brotherhood, and service among the men of our church. We focus on strengthening men's relationship with God while encouraging leadership, accountability, and service to others. Here are some key activities within the Pemem Ministry:</p>
+
+            <ul>
+                <li><strong>Men's Bible Study:</strong> Weekly sessions where men gather to study Scripture and discuss how to apply God's Word in their lives. (Every Wednesday at 6:30 PM)</li>
+                <li><strong>Prayer Meetings:</strong> Weekly prayer gatherings where men come together to pray for one another, the church, and the community. (Every Saturday at 7:00 AM)</li>
+                <li><strong>Men's Retreat:</strong> Annual retreat focused on spiritual renewal, fellowship, and building stronger bonds among the men of the church.</li>
+                <li><strong>Community Outreach:</strong> Service projects and outreach programs, where men work together to serve the local community through volunteering, construction projects, and other initiatives.</li>
+                <li><strong>Leadership Training:</strong> Seminars and workshops aimed at developing strong Christian men who lead by example in their homes, workplaces, and communities.</li>
+            </ul>
+
+            <p>The Pemem Ministry is a place for men to grow together in faith, support one another in their spiritual journeys, and lead by example in their families and communities. We encourage all men to join and be a part of this exciting ministry.</p>
+
+            <p>We look forward to seeing you at our next meeting!</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="contact">
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <textarea id="message" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 The Church of Pentecost Huniso District. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage Multiple Profiles with Age Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .profile-form {
+            margin-bottom: 20px;
+        }
+        .profile-list {
+            margin-top: 20px;
+            background-color: #f7f3f1; /* Light pinkish color */
+            border: 4px solid #e0a0a0; /* Soft border color for emphasis */
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-top: 20px;
+            background-color: #f7f3f1; /* pinkish color */
+            border: 4px solid #e0a0a0; /* Soft border color for emphasis */
+            border-radius: 8px;
+        }
+        .adult-message {
+            color: blue;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+     <script>
+        // Function to save a profile to localStorage
+        function saveProfile() {
+            let username = document.getElementById('username').value;
+            let dob = document.getElementById('dob').value;
+
+            if (username && dob) {
+                // Calculate age from Date of Birth
+                let age = calculateAge(dob);
+
+                // Get existing profiles from localStorage (if any)
+                let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+
+                // Create a unique profile ID
+                let profileId = new Date().getTime(); // using timestamp as unique ID
+
+                // Add the new profile
+                profiles[profileId] = { name: username, dob: dob, age: age };
+
+                // Save the updated profiles object back to localStorage
+                localStorage.setItem('profiles', JSON.stringify(profiles));
+
+                // Clear the input fields
+                document.getElementById('username').value = '';
+                document.getElementById('dob').value = '';
+
+                // Display the updated profile list
+                displayProfiles();
+
+                // Show success message
+                showSuccessMessage(username);
+
+                // Show age-based message
+                if (age >= 18) {
+                    showAdultMessage();
+                }
+            } else {
+                alert("Please enter both your name and date of birth.");
+            }
+        }
+
+        // Function to calculate age from date of birth
+        function calculateAge(dob) {
+            let birthDate = new Date(dob);
+            let currentDate = new Date();
+            let age = currentDate.getFullYear() - birthDate.getFullYear();
+            let month = currentDate.getMonth() - birthDate.getMonth();
+
+            if (month < 0 || (month === 0 && currentDate.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Function to display all saved profiles from localStorage
+        function displayProfiles() {
+            let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+
+            let profileList = document.getElementById('profile-info');
+            profileList.innerHTML = ''; // Clear current list
+
+            if (Object.keys(profiles).length === 0) {
+                profileList.innerHTML = 'No profiles saved yet.';
+            } else {
+                // Loop through all profiles and display them
+                for (let profileId in profiles) {
+                    let profile = profiles[profileId];
+                    let profileDiv = document.createElement('div');
+                    profileDiv.innerHTML = `<strong>Name:</strong> ${profile.name}, <strong>Age:</strong> ${profile.age} <button onclick="deleteProfile(${profileId})">Delete</button>`;
+                    profileList.appendChild(profileDiv);
+                }
+            }
+        }
+
+        // Function to delete a specific profile
+        function deleteProfile(profileId) {
+            // Get existing profiles
+            let profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+
+            // Remove the profile with the given ID
+            delete profiles[profileId];
+
+            // Save the updated profiles object back to localStorage
+            localStorage.setItem('profiles', JSON.stringify(profiles));
+
+            // Display the updated list
+            displayProfiles();
+        }
+
+        // Function to show success message
+        function showSuccessMessage(username) {
+            let successMessage = document.getElementById('success-message');
+            successMessage.innerHTML = `You have successfully stored your credentials, ${username}!`;
+            successMessage.style.display = 'block';
+
+            // Hide the success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to show the adult message if the user is above 18
+        function showAdultMessage() {
+            let adultMessage = document.getElementById('adult-message');
+            adultMessage.innerHTML = "Hurray, you are an adult!";
+            adultMessage.style.display = 'block';
+
+            // Hide the adult message after 3 seconds
+            setTimeout(() => {
+                adultMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Display profiles on page load
+        window.onload = function() {
+            displayProfiles();
+        }
+
+    </script>
+
+</body>
+</html>
